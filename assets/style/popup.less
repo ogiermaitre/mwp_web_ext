@@ -1,0 +1,37 @@
+#pagetitle {
+    .id {
+        color      : darkgrey;
+        margin-left: 10px;
+    }
+
+    .id:before {
+        content: '#'
+    }
+}
+
+div.title {
+    span.counter {
+        &:before {
+            content: '(';
+        }
+
+        &::after {
+            content: ')';
+        }
+    }
+    button:disabled {
+        display: none;
+    }
+}
+
+div#tabheader{
+    display: flex;
+}
+
+div.buttoncontainer{
+    display: flex;
+}
+
+div.pusher {
+    flex-grow: 1;
+}

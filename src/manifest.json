@@ -20,7 +20,7 @@
 	},
 	"browser_action": {
 		"default_title": "Web Extension Starter",
-		"default_icon": "assets/icon-48.png",
+		"default_icon": "assets/img/icon-48.png",
 		"default_popup": "popup.html"
 	},
 	"content_scripts": [
