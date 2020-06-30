@@ -3,6 +3,7 @@ const path = require('path')
 
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtensionReloader = require('webpack-extension-reloader')
 
 const resolve = require('./webpack.config.resolve')
 
@@ -10,7 +11,10 @@ const sourceRootPath = path.join(__dirname, 'src')
 const assetPath = path.join(__dirname, 'assets')
 const distRootPath = path.join(__dirname, 'dist')
 
+const watching = process.env.NODE_ENV === 'watch'
+
 module.exports = {
+    watch: watching,
     entry: {
         background: path.join(sourceRootPath, 'background', 'index.js'),
         // options: path.join(sourceRootPath, 'options', 'index.tsx'),
@@ -46,6 +50,15 @@ module.exports = {
 
     },
     plugins: [
+        watching ? new ExtensionReloader({
+            port: 9090, // Which port use to create the server
+            reloadPage: true, // Force the reload of the page also
+            entries: { // The entries used for the content/background scripts or extension pages
+                contentScript: 'content',
+                background: 'background',
+                extensionPage: 'popup',
+            },
+        }) : () => { this.apply = () => { } },
         new HtmlWebpackPlugin({
             template: path.join(assetPath, 'popup.html'),
             inject: 'body',
