@@ -10,6 +10,7 @@ module.exports = {
         node: true,
         es6: true,
         browser: true,
+        webextensions: true,
     },
     plugins: [],
     extends: [
