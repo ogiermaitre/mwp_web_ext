@@ -1,6 +1,10 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const path = require('path')
+
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+const resolve = require('./webpack.config.resolve')
 
 const sourceRootPath = path.join(__dirname, 'src')
 const assetPath = path.join(__dirname, 'assets')
@@ -13,6 +17,7 @@ module.exports = {
         popup: path.join(sourceRootPath, 'popup', 'index.js'),
         content: path.join(sourceRootPath, 'content', 'index.js'),
     },
+    ...resolve,
     output: {
         path: distRootPath,
         filename: '[name].js',
