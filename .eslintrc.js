@@ -1,11 +1,11 @@
 module.exports = {
-    // settings: {
-    //     'import/resolver': {
-    //         webpack: {
-    //             config: './webpack.config.resolve.js',
-    //         },
-    //     },
-    // },
+    settings: {
+        'import/resolver': {
+            webpack: {
+                config: './webpack.config.resolve.js',
+            },
+        },
+    },
     env: {
         node: true,
         es6: true,
@@ -16,10 +16,10 @@ module.exports = {
         'airbnb-base',
         'eslint:recommended',
     ],
+    parser: 'babel-eslint',
     parserOptions: {
         ecmaVersion: 9,
         sourceType: 'module',
-        parser: 'babel-eslint',
     },
     rules: {
         'consistent-this': 'off',
