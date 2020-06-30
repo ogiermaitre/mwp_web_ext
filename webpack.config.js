@@ -1,14 +1,14 @@
 const path = require('path')
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const sourceRootPath = path.join(__dirname, 'src');
-const assetPath = path.join(__dirname, 'assets');
-const distRootPath = path.join(__dirname, 'dist');
+const sourceRootPath = path.join(__dirname, 'src')
+const assetPath = path.join(__dirname, 'assets')
+const distRootPath = path.join(__dirname, 'dist')
 
 module.exports = {
     entry: {
-        // background: path.join(sourceRootPath, 'background', 'index.ts'),
+        background: path.join(sourceRootPath, 'background', 'index.js'),
         // options: path.join(sourceRootPath, 'options', 'index.tsx'),
         popup: path.join(sourceRootPath, 'popup', 'index.js'),
         content: path.join(sourceRootPath, 'content', 'index.js'),
@@ -51,8 +51,8 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 { from: path.join(assetPath, 'img'), to: path.join(distRootPath, 'assets', 'img') },
-                { from: path.join(sourceRootPath, 'manifest.json'), to: path.join(distRootPath, 'manifest.json'), toType: 'file' }
+                { from: path.join(sourceRootPath, 'manifest.json'), to: path.join(distRootPath, 'manifest.json'), toType: 'file' },
             ],
-        })
+        }),
     ],
 }
