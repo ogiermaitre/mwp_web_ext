@@ -66,13 +66,22 @@ const tabs = (headerSelector, tabSelectors, defaultTab = 0) => {
     }
 
     headerNode.selectAll('button').on('click', (d, i) => {
-        console.log(`click on ${i}`)
         currentTab = i
 
         refreshTab()
     })
 
     refreshTab()
+
+    return {
+        goto(n) {
+            currentTab = n
+            refreshTab()
+        },
+        setStatus(n, status) {
+            headerNode.selectAll('button').filter((d, i) => i === n).property('disabled', !status)
+        },
+    }
 }
 
 const idTab = () => {
@@ -89,21 +98,32 @@ const idTab = () => {
         const pageid = inputNode.property('value')
 
         const url = `https://${project}.wikipedia.org?curid=${pageid}`
+
+        // eslint-disable-next-line no-unused-vars
         const creating = browser.tabs.create({ url })
     })
 }
 
-const wpUrlRe = new RegExp('http.://([a-z]+)\\.wikipedia\\.org/wiki/(.*)')
+const wpCheckRe = new RegExp('http.://([a-z]+)\\.wikipedia\\.org/wiki/(.*)')
 const titleNode = select('#pagetitle')
 const redirections = select('#redirections')
 const langlinks = select('#langlinks')
 
+// eslint-disable-next-line no-unused-vars
+const redirectionButton = buttons(redirections.node())
+// eslint-disable-next-line no-unused-vars
+const langlinksButton = buttons(langlinks.node())
+// eslint-disable-next-line no-unused-vars
+const idt = idTab()
+
+const t = tabs('#tabheader', ['div.tab1', 'div.tab2'], 0)
+
 browser.tabs.query({ currentWindow: true, active: true }).then(tabs => {
     // TODO: we should find the title, event when the url uses ?curid=234554
-    // TODO: we should also handle the case where the current URL is not a wikipedia page (display tab2)
     if (tabs.length === 1) {
         const [{ url }] = tabs
-        const m = wpUrlRe.exec(url)
+
+        const m = wpCheckRe.exec(url)
         if (m) {
             const [, project, title] = m
 
@@ -122,12 +142,9 @@ browser.tabs.query({ currentWindow: true, active: true }).then(tabs => {
                     const liLL = langlinks.select('ul').selectAll('li').data(d.langlinks, d => `${project}_${d.id}`)
                     liLL.enter().append('li').text(d => d.title)
                 })
+        } else {
+            t.goto(1)
+            t.setStatus(0, false)
         }
     }
 })
-
-const redirectionButton = buttons(redirections.node())
-const langlinksButton = buttons(langlinks.node())
-
-const t = tabs('#tabheader', ['div.tab1', 'div.tab2'], 1)
-const idt = idTab()
