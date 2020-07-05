@@ -10,6 +10,15 @@ const projects = [
     { code: 'en', name: 'English' },
 ]
 
+// const { font } = window.getComputedStyle(this.$refs.title, null)
+// export const getTextWidth = (text, font) => {
+//     const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement('canvas'))
+//     const context = canvas.getContext('2d')
+//     context.font = font
+//     const metrics = context.measureText(text)
+//     return metrics.width
+// }
+
 const getAPIInfos = (prj, title) => {
     const url = `https://${prj}.wikipedia.org/w/api.php?action=query&format=json&prop=redirects|langlinks&titles=${title}&rdlimit=499&lllimit=300`
     return fetch(url)
@@ -156,7 +165,9 @@ browser.tabs.query({ currentWindow: true, active: true }).then(tabs => {
                     const liRedSel = redirections.select('ul').selectAll('li').data(d.redirects, d => `${project}_${d.id}`)
                     liRedSel.enter().append('li').text(d => d.title)
                     const liLL = langlinks.select('ul').selectAll('li').data(d.langlinks, d => `${project}_${d.id}`)
-                    liLL.enter().append('li').text(d => d.title)
+                    const lis = liLL.enter().append('li')
+                    lis.append('span').attr('class', 'llcode').text(d => d.code)
+                    lis.append('a').attr('class', 'llink').attr('href', d => d.url).text(d => d.title)
                 })
         } else {
             t.goto(1)
