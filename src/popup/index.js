@@ -92,6 +92,21 @@ const idTab = () => {
     prjSel.enter().append('option').attr('value', d => d.code).text(d => d.name)
 
     // TODO: we should check if pageid is valid, whenever the input or the select change.
+    const checkChanges = () => {
+        const project = selectNode.select('option:checked').attr('value')
+        const pageid = inputNode.property('value')
+
+        const query = `https://${project}.wikipedia.org/w/api.php?action=query&format=json&pageids=${pageid}`
+        fetch(query)
+            .then(d => d.json())
+            .then(d => {
+                const noError = d.query?.pages[parseInt(`${pageid}`, 10)]?.missing === undefined
+                select('#gotowikipedia').property('disabled', !noError)
+            })
+    }
+
+    selectNode.on('change', checkChanges)
+    inputNode.on('input', checkChanges)
 
     select('#gotowikipedia').on('click', () => {
         const project = selectNode.select('option:checked').attr('value')
@@ -102,6 +117,7 @@ const idTab = () => {
         // eslint-disable-next-line no-unused-vars
         const creating = browser.tabs.create({ url })
     })
+        .property('disabled', true)
 }
 
 const wpCheckRe = new RegExp('http.://([a-z]+)\\.wikipedia\\.org/wiki/(.*)')
